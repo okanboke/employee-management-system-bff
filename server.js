@@ -16,10 +16,11 @@ app.use(bodyParser.json());
 
 app.post('/api/auth/login', (req, res) => { //isteği alır ve aşağıda axios'a yönlendirir.
   const { userName, password } = req.body;
+  const { headers } = req;
 
   // Özel bir BFF işlemi gerçekleştirebilirsiniz
   // Bu örnekte isteği alıp bir backend API'ya yönlendiriyoruz
-  axios.post(`${baseUrl}/api/auth/login`, { userName, password })
+  axios.post(`${baseUrl}/api/auth/login`, { userName, password }, { headers })
     .then(response => {
       res.status(response.status).json(response.data);
     })
@@ -31,10 +32,11 @@ app.post('/api/auth/login', (req, res) => { //isteği alır ve aşağıda axios'
 //user Login login | Backend: AuthController
 app.post('/api/auth/user/login', (req, res) => {
   const { userName, password } = req.body;
+  const { headers } = req;
 
   // Özel bir BFF işlemi gerçekleştirebilirsiniz
   // Bu örnekte isteği alıp bir backend API'ya yönlendiriyoruz
-  axios.post(`${baseUrl}/api/auth/user/login`, { userName, password })
+  axios.post(`${baseUrl}/api/auth/user/login`, { userName, password }, { headers })
     .then(response => {
       res.status(response.status).json(response.data);
     })
@@ -46,10 +48,10 @@ app.post('/api/auth/user/login', (req, res) => {
 //Frontend: CreateUser admin user ekleme | Backend: AuthController
 app.post('/api/auth/admin/create-user', (req, res) => {
   const { headers } = req;
-  const { firstName, lastName, userName, password, userDate} = req.body;
+  const { firstName, lastName, userName, password, userDate, restDay, phoneNumber} = req.body;
 
   //İsteği alıp bir backend API'ya yönlendiriyoruz
-  axios.post(`${baseUrl}/api/auth/admin/create-user`, { firstName, lastName, userName, password, userDate}, { headers })
+  axios.post(`${baseUrl}/api/auth/admin/create-user`, { firstName, lastName, userName, password, userDate, restDay, phoneNumber }, { headers })
   .then(response => {
     res.status(response.status).json(response.data);
   })
