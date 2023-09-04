@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
 const path = require('path');
+const { error } = require('console');
 //const cookieParser = require('cookie-parser'); //öğrenilecek
 
 const app = express();
@@ -250,6 +251,41 @@ app.get('/api/admin/list-user', (req, res) => {
       res.status(500).json({ message: 'BFF admin user görüntülemede bir hata oluştu' });
     });
 });
+
+//Frontend: ListAnnualPermissions admin yıllık izin görüntüleme | Backend: AnnualPermissionController
+app.get('/api/annual/permissions/admin/list-permissions', (req, res) => {
+  const { headers } = req;
+
+  //İsteği alıp bir backend API'ya yönlendiriyoruz
+  axios.get(`${baseUrl}/api/annual/permissions/admin/list-permissionsr`, { headers })
+    .then(response => {
+      res.status(response.status).json(response.data);
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'BFF admin user görüntülemede bir hata oluştu' });
+    });
+});
+
+//Frontend: AnnualPermissions user izin ekleme | Backend: AnnualPermissionController
+app.post('/api/annual/permissions/user/create', (req, res) => {
+  const { userId, permissionDescription, startDate, endDate } = req.body;
+  const { headers } = req;
+
+  //Bu isteği alıp bir backend API'ya yönlendiriyoruz
+  
+  axios.post(`${baseUrl}/api/annual/permissions/user/create`, { userId, permissionDescription, startDate, endDate }, { headers })
+  .then(response => {
+    if (response.status == 200) {
+      res.status(response.status).json(response.data);
+    } else {
+      res.status(response.status).json(response.data);
+    }
+  })
+  .catch(error => {
+    res.status(error.response.status).json(error.response.data.errorMessage);//backend'den gelen hata statusu
+  })
+});
+
 
 
 app.listen(port, () => {
