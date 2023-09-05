@@ -268,12 +268,12 @@ app.get('/api/annual/permissions/admin/list-permissions', (req, res) => {
 
 //Frontend: AnnualPermissions user izin ekleme | Backend: AnnualPermissionController
 app.post('/api/annual/permissions/user/create', (req, res) => {
-  const { userId, permissionDescription, startDate, endDate } = req.body;
+  const { userId, contactPersonName, contactPerson, travelLocation, startDate, endDate } = req.body;
   const { headers } = req;
 
   //Bu isteği alıp bir backend API'ya yönlendiriyoruz
   
-  axios.post(`${baseUrl}/api/annual/permissions/user/create`, { userId, permissionDescription, startDate, endDate }, { headers })
+  axios.post(`${baseUrl}/api/annual/permissions/user/create`, { userId, startDate, endDate,contactPersonName, contactPerson, travelLocation }, { headers })
   .then(response => {
     if (response.status == 200) {
       res.status(response.status).json(response.data);
@@ -286,6 +286,36 @@ app.post('/api/annual/permissions/user/create', (req, res) => {
   })
 });
 
+
+//Frontend: ListAnnualPermissions user izin yıllık görüntüleme | Backend: AnnualPermissionController
+app.post('/api/annual/permissions/user/list-permissions', (req, res) => {
+  const { id } = req.body;
+  const { headers } = req;
+
+  // Bu isteği alıp bir backend API'ya yönlendiriyoruz
+  axios.post(`${baseUrl}/api/annual/permissions/user/list-permissions`, { id }, { headers })
+    .then(response => {
+      res.status(response.status).json(response.data);
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'BFF işleminde hata oluştu' });
+    });
+});
+
+//Frontend: HomeUser user bilgi görüntüleme | Backend: EmployeeController
+app.post('/api/employee/user-home/userInfo', (req, res) => {
+  const { id } = req.body;
+  const { headers } = req;
+
+  // Bu isteği alıp bir backend API'ya yönlendiriyoruz
+  axios.post(`${baseUrl}/api/employee/user-home/userInfo`, { id }, { headers })
+    .then(response => {
+      res.status(response.status).json(response.data);
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'BFF işleminde hata oluştu' });
+    });
+});
 
 
 app.listen(port, () => {
