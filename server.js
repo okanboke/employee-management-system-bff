@@ -253,11 +253,11 @@ app.get('/api/admin/list-user', (req, res) => {
 });
 
 //Frontend: ListAnnualPermissions admin yıllık izin görüntüleme | Backend: AnnualPermissionController
-app.get('/api/annual/permissions/admin/list-permissions', (req, res) => {
+app.get('/api/annual/permissions/admin/list-annual', (req, res) => {
   const { headers } = req;
 
   //İsteği alıp bir backend API'ya yönlendiriyoruz
-  axios.get(`${baseUrl}/api/annual/permissions/admin/list-permissionsr`, { headers })
+  axios.get(`${baseUrl}/api/annual/permissions/admin/list-annual`, { headers })
     .then(response => {
       res.status(response.status).json(response.data);
     })
@@ -314,6 +314,21 @@ app.post('/api/employee/user-home/userInfo', (req, res) => {
     })
     .catch(error => {
       res.status(500).json({ message: 'BFF işleminde hata oluştu' });
+    });
+});
+
+//Frontend: ListAnnualPermissions admin yıllık izin onaylama put | Backend: AnnualPermissionController
+app.put('/api/annual/permissions/admin/update-status', (req, res) => {
+  const { permissionId, approvalStatus } = req.body;
+  const { headers } = req;
+
+  //Bu isteği alıp bir backend API'ya yönlendiriyoruz
+  axios.put(`${baseUrl}/api/annual/permissions/admin/update-status`, { permissionId, approvalStatus }, { headers })
+    .then(response => {
+      res.status(response.status).json(response.data);
+    })
+    .catch(error => {
+      res.status(500).json({ meesage: 'BFF katmanında izin onaylamada hata oluştu' });
     });
 });
 
