@@ -42,7 +42,9 @@ app.post('/api/auth/user/login', (req, res) => {
       res.status(response.status).json(response.data);
     })
     .catch(error => {
-      res.status(500).json({ message: 'BFF işleminde hata oluştu' });
+      console.log(error.response);
+      res.status(error.response.status).json(error.response.data.message);//backend'den gelen hata statusu
+
     });
 });
 
@@ -329,6 +331,21 @@ app.put('/api/annual/permissions/admin/update-status', (req, res) => {
     })
     .catch(error => {
       res.status(500).json({ meesage: 'BFF katmanında izin onaylamada hata oluştu' });
+    });
+});
+
+//Frontend: HomeUser user bilgi görüntüleme | Backend: EmployeeController
+app.post('/api/annual/permissions/user/calculate', (req, res) => {
+  const { id, startDate, endDate } = req.body;
+  const { headers } = req;
+
+  // Bu isteği alıp bir backend API'ya yönlendiriyoruz
+  axios.post(`${baseUrl}/api/annual/permissions/user/calculate`, { id, startDate, endDate }, { headers })
+    .then(response => {
+      res.status(response.status).json(response.data);
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'BFF işleminde hata oluştu' });
     });
 });
 
