@@ -5,28 +5,25 @@ const path = require('path');
 const { error } = require('console');
 //const cookieParser = require('cookie-parser'); //öğrenilecek
 
+
 const app = express();
 const port = 3001;
 const baseUrl = "http://localhost:8080"; //backend url
 
 app.use(bodyParser.json());
 
-
-
 //admin login | Backend: AuthController
-
 app.post('/api/auth/login', (req, res) => { //isteği alır ve aşağıda axios'a yönlendirir.
   const { userName, password } = req.body;
   const { headers } = req;
 
-  // Özel bir BFF işlemi gerçekleştirebilirsiniz
   // Bu örnekte isteği alıp bir backend API'ya yönlendiriyoruz
   axios.post(`${baseUrl}/api/auth/login`, { userName, password }, { headers })
     .then(response => {
       res.status(response.status).json(response.data);
     })
     .catch(error => {
-      res.status(500).json({ message: 'BFF işleminde hata oluştu' });
+      res.status(500).json({ message: 'Kullanıcı adı veya şifre hatalı!' });
     });
 });
 
@@ -42,8 +39,8 @@ app.post('/api/auth/user/login', (req, res) => {
       res.status(response.status).json(response.data);
     })
     .catch(error => {
-      console.log(error.response);
-      res.status(error.response.status).json(error.response.data.message);//backend'den gelen hata statusu
+      console.log(error.response.data);
+      res.status(error.response.status).json(error.response.data);//backend'den gelen hata statusu
 
     });
 });
